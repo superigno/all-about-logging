@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+	<Properties>
+        <Property name="LOG_PATTERN">
+            %d{HH:mm:ss.SSS} %-5level %class{36} %X{username} %L %M - %msg%xEx%n
+        </Property>
+    </Properties>
+    
+	<Appenders>
+	
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+		</Console>
+
+		<RollingFile name="RollingFile"
+			fileName="./logs/spring-boot-logger-log4j2.log"
+			filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+			<Policies>
+				<!-- rollover on startup, daily and when the file reaches 10 MegaBytes -->
+				<OnStartupTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<!-- LOG everything at INFO level -->
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+
+		<!-- LOG "com.superigno*" at TRACE level -->
+		<Logger name="com.superigno.logging.controller.LoggingController" level="error"></Logger>
+	</Loggers>
+
+</Configuration>
